@@ -3,25 +3,67 @@ from openai import OpenAI
 
 # Show title and description.
 st.title("💬 Chatbot")
-st.write(
-    "This is a simple chatbot that uses OpenAI's GPT-3.5 model to generate responses. "
-    "To use this app, you need to provide an OpenAI API key, which you can get [here](https://platform.openai.com/account/api-keys). "
-    "You can also learn how to build this app step by step by [following our tutorial](https://docs.streamlit.io/develop/tutorials/llms/build-conversational-apps)."
-)
+def get_bot_response(user_input):
+    user_input = user_input.lower()
 
-# Ask user for their OpenAI API key via `st.text_input`.
-# Alternatively, you can store the API key in `./.streamlit/secrets.toml` and access it
-# via `st.secrets`, see https://docs.streamlit.io/develop/concepts/connections/secrets-management
-openai_api_key = st.text_input("OpenAI API Key", type="password")
-if not openai_api_key:
-    st.info("Please add your OpenAI API key to continue.", icon="🗝️")
-else:
+    # Friendly greetings
+    if "hi" in user_input or "hello" in user_input:
+        return "Hello there!  Ask me anything fun or interesting!"
+    elif "how are you" in user_input:
+        return "I'm a bot, but I'm doing great! Thanks for asking "
+    elif "bye" in user_input or "goodbye" in user_input:
+        return "Goodbye! Have a wonderful day! "
 
-    # Create an OpenAI client.
-    client = OpenAI(api_key=openai_api_key)
+    # Fun questions
+    elif "joke" in user_input:
+        return "Why did the computer go to the doctor? Because it had a virus! "
+    elif "riddle" in user_input:
+        return "Riddle: What has keys but can't open locks? \nAnswer: A piano!"
+    elif "fact" in user_input:
+        return "Fun Fact: A day on Venus is longer than its year!"
 
-    # Create a session state variable to store the chat messages. This ensures that the
-    # messages persist across reruns.
+    # General knowledge
+    elif "capital of japan" in user_input:
+        return "The capital of Japan is Tokyo "
+    elif "tallest building" in user_input:
+        return "The tallest building is the Burj Khalifa in Dubai, standing at 828 meters!"
+
+    # Space and science
+    elif "sun" in user_input:
+        return "The Sun is a star that provides light and heat to Earth."
+    elif "moon" in user_input:
+        return "The Moon is Earth's only natural satellite. It affects the tides on Earth."
+    elif "planet" in user_input:
+        return "There are 8 planets in our solar system. Earth is the third from the Sun."
+
+    # Animals
+    elif "fastest animal" in user_input:
+        return "The cheetah is the fastest land animal, reaching speeds up to 120 km/h!"
+    elif "largest animal" in user_input:
+        return "The blue whale is the largest animal to have ever lived."
+
+    # History
+    elif "mahatma gandhi" in user_input:
+        return "Mahatma Gandhi was a leader of India's independence movement known for nonviolent protest."
+    elif "who discovered america" in user_input:
+        return "Christopher Columbus is credited with discovering America in 1492."
+
+    # Default fallback
+    else:
+        return "Hmm... I don’t know that yet. Try asking me about space, animals, facts, jokes, or history!"
+
+# Streamlit app interface
+st.set_page_config(page_title="Smart Chatbot", page_icon="")
+st.title(" Smart & Fun Chatbot")
+st.write("Chat with me! Ask questions, hear a joke, or learn a fun fact!")
+
+# Input from user
+user_input = st.text_input("You:", "")
+
+# Show chatbot response
+if user_input:
+    response = get_bot_response(user_input)
+    st.text_area("Bot:", value=response, height=100)
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
